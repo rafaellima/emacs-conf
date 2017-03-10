@@ -65,3 +65,108 @@ python -m pip install --user certifi
   ;;      (url-retrieve "https://badssl.com"
   ;;                    (lambda (retrieved) t))))
 #+END_SRC
+
+* Installing use-package
+** Setup
+
+GNU Emacs has a lot of packages that make things very easy for the
+user. The package management infrastructure makes it a breeze to
+install new packages and keep up-to-date with their development.
+
+There are several package archives available for GNU Emacs:
+
+- GNU
+- Marmalade
+- Melpa
+
+Each archive will write its files in a seperate archive directory.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+#+END_SRC
+
+Because the default setting for package-archives is to use the HTTP access to the GNU archive, I set the variable to `nil` before adding the HTTPS variants.
+
+#+name: credmp-package-infrastructure
+#+begin_src emacs-lisp
+
+  (defvar gnu '("gnu" . "https://elpa.gnu.org/packages/"))
+  (defvar melpa '("melpa" . "https://melpa.org/packages/"))
+  (defvar melpa-stable '("melpa-stable" . "https://stable.melpa.org/packages/"))
+
+  ;; Add marmalade to package repos
+  (setq package-archives nil)
+  (add-to-list 'package-archives melpa-stable t)
+  (add-to-list 'package-archives melpa t)
+  (add-to-list 'package-archives gnu t)
+#+end_src
+
+Initialize the archive and refresh the contents in case there is no cached archive.
+
+#+BEGIN_SRC emacs-lisp
+  (package-initialize)
+
+  (unless (and (file-exists-p (concat init-dir "elpa/archives/gnu"))
+               (file-exists-p (concat init-dir "elpa/archives/melpa"))
+               (file-exists-p (concat init-dir "elpa/archives/melpa-stable")))
+    (package-refresh-contents))
+#+END_SRC
+
+At each load the package list will be evaluated and any missing
+packages will be installed. The packages-install function deals with
+this check and takes care of any loading of the packages.
+
+#+name: credmp-package-installer
+#+begin_src emacs-lisp
+  (defun packages-install (&rest packages)
+    (message "running packages-install")
+    (mapc (lambda (package)
+            (let ((name (car package))
+                  (repo (cdr package)))
+              (when (not (package-installed-p name))
+                (let ((package-archives (list repo)))
+                  (package-initialize)
+                  (package-install name)))))
+          packages)
+    (package-initialize)
+    (delete-other-windows))
+#+end_src
+
+** The package
+
+#+name: credmp-package-installer
+#+begin_src emacs-lisp
+  ;; Install extensions if they're missing
+  (defun init--install-packages ()
+    (message "Lets install some packages")
+    (packages-install
+     ;; Since use-package this is the only entry here
+     ;; ALWAYS try to use use-package!
+     (cons 'use-package melpa)
+     ))
+
+  (condition-case nil
+      (init--install-packages)
+    (error
+     (package-refresh-contents)
+     (init--install-packages)))
+#+end_src
+
+* Moving around
+
+Be sure to just ask for y/n instead of yes/no.
+
+#+BEGIN_SRC emacs-lisp
+(fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
+
+Bookmarks are very useful for quickly jumping around files.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package bm
+    :ensure t
+    :bind (("C-c =" . bm-toggle)
+           ("C-c [" . bm-previous)
+           ("C-c ]" . bm-next)))
+
+#+END_SRC
