@@ -240,3 +240,32 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
     :config
     (which-key-mode))
 #+END_SRC
+
+* Environment
+
+#+name: starter-kit-osX-workaround
+#+begin_src emacs-lisp
+  (if (or
+       (eq system-type 'darwin)
+       (eq system-type 'berkeley-unix))
+      (setq system-name (car (split-string system-name "\\."))))
+
+  (setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
+  (push "/usr/local/bin" exec-path)
+
+  ;; /usr/libexec/java_home
+  ;;(setenv "JAVA_HOME" "/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home")
+#+end_src
+
+** GUI
+
+- Turn off mouse interface early in startup to avoid momentary display.
+
+#+name: credmp-gui
+#+begin_src emacs-lisp
+  (menu-bar-mode 1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+#+end_src
+
+
