@@ -269,3 +269,49 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
 #+end_src
 
 
+* Look and feel
+
+#+name: credmp-package-installer
+#+begin_src emacs-lisp
+  (use-package arjen-grey-theme
+    :ensure t
+    :config
+    (load-theme 'arjen-grey t))
+
+  (if (eq system-type 'darwin)
+      (set-face-attribute 'default nil :font "Fira code")
+    (set-face-attribute 'default nil :font "DejaVu Sans Mono" :height 110))
+#+end_src
+
+#+BEGIN_SRC emacs-lisp
+  (use-package command-log-mode
+    :ensure t)
+
+  (defun live-coding ()
+    (interactive)
+    (set-face-attribute 'default nil :font "Fira code")
+    (add-hook 'prog-mode-hook 'command-log-mode))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+   (eval-after-load "org-indent" '(diminish 'org-indent-mode))
+#+END_SRC
+
+Have the ability to use some amazing font icons
+
+#+BEGIN_SRC emacs-lisp
+;;   (use-package all-the-icons
+;;     :ensure t)
+#+END_SRC
+
+Be sure to install the fonts from [[https://github.com/domtronn/all-the-icons.el/tree/master/fonts][the github repo]].
+
+Now, lets make sure we are not `ding`-ed all the time.
+
+#+BEGIN_SRC emacs-lisp
+  ;; http://stackoverflow.com/questions/11679700/emacs-disable-beep-when-trying-to-move-beyond-the-end-of-the-document
+  (defun my-bell-function ())
+
+  (setq ring-bell-function 'my-bell-function)
+  (setq visible-bell nil)
+#+END_SRC
