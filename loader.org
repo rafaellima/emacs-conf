@@ -333,3 +333,42 @@ Now, lets make sure we are not `ding`-ed all the time.
   (use-package markdown-mode
     :ensure t)
 #+END_SRC
+
+
+
+
+* Programming
+
+** General programming
+
+*** Look and feel
+
+Enable the prettify symbols mode. It will translate (fn) to the lambda
+sign.
+
+#+BEGIN_SRC emacs-lisp
+  (global-prettify-symbols-mode 1)
+#+END_SRC
+
+*** Version Control
+Magit is the only thing you need when it comes to Version Control (Git)
+
+#+BEGIN_SRC emacs-lisp
+  (use-package magit
+    :ensure t
+    :bind (("C-c m s" . magit-status)))
+
+  (use-package magit-gitflow
+    :ensure t
+    :config
+    (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
+#+END_SRC
+
+** Ruby
+I'm currently working a lot with Ruby (on Rails). Adding rinari + rspec_mode
+
+#+begin_src emacs-lisp
+(require 'rinari)
+(require 'rspec-mode)
+#+end_src
+
