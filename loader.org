@@ -225,6 +225,16 @@ Bookmarks are very useful for quickly jumping around files.
   (use-package ivy-hydra :ensure t)
 #+END_SRC
 
+Counsel-projectile shortcuts
+
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c p f") 'counsel-projectile-find-file)
+(global-set-key (kbd "C-c p d") 'counsel-projectile-find-dir)
+(global-set-key (kbd "C-c p b") 'counsel-projectile-switch-buffer)
+(global-set-key (kbd "C-c p a g") 'counsel-projectile-ag)
+(global-set-key (kbd "C-c p p") 'counsel-projectile-switch-project)
+#+end_src
+
 From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/][Pragmatic Emacs]] a more concise way to kill the buffer.
 
 #+begin_src emacs-lisp
@@ -315,3 +325,4 @@ Now, lets make sure we are not `ding`-ed all the time.
   (setq ring-bell-function 'my-bell-function)
   (setq visible-bell nil)
 #+END_SRC
+
