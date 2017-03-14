@@ -372,3 +372,20 @@ I'm currently working a lot with Ruby (on Rails). Adding rinari + rspec_mode
 (require 'rspec-mode)
 #+end_src
 
+**** Rbenv
+Add rbenv conf. With this configuration all bundler commands will work from inside emacs
+
+#+begin_src emacs-lisp
+  (if (file-exists-p "/usr/local/bin/rbenv")
+  (require 'rbenv)
+
+  (setq rbenv-installation-dir "/usr/local/rbenv")
+
+  (global-rbenv-mode))
+
+  ;; Setting rbenv path
+  (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
+  (setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims") (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
+
+#+end_src
+
