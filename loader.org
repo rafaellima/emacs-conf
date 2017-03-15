@@ -420,3 +420,12 @@ The web-mode is particularily good for editing HTML and JS files.
     :config
     (add-hook 'clojure-mode-hook 'emmet-mode))
 #+end_src
+** Plugins
+*** Ace jump
+Help move the cursor within Emacs
+
+#+begin_src emacs-lisp
+  (use-package ace-jump-mode
+    :ensure t)
+    (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
+#+end_src
