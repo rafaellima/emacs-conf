@@ -364,6 +364,7 @@ Magit is the only thing you need when it comes to Version Control (Git)
     (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
 #+END_SRC
 
+
 ** Ruby
 I'm currently working a lot with Ruby (on Rails). Adding rinari + rspec_mode
 
@@ -391,6 +392,7 @@ Add rbenv conf. With this configuration all bundler commands will work from insi
 
 
 ** Web editing
+
 
 The web-mode is particularily good for editing HTML and JS files.
 
@@ -420,6 +422,7 @@ The web-mode is particularily good for editing HTML and JS files.
     :config
     (add-hook 'clojure-mode-hook 'emmet-mode))
 #+end_src
+
 ** Plugins
 *** Ace jump
 Help move the cursor within Emacs
@@ -429,3 +432,11 @@ Help move the cursor within Emacs
     :ensure t)
     (global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 #+end_src
+
+*** Flycheck
+
+ #+begin_src emacs-lisp
+ (use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+ #+end_src
