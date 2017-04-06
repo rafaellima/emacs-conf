@@ -406,6 +406,14 @@ Configuring smartparens for ruby
 #+end_src
 
 
+**** Pry
+In order to enable pry when using rspec-mode we need to initialize inf-ruby
+To do so, use C-x C-q when you've hit a breakpoint
+
+#+begin_src emacs-lisp
+  (add-hook 'after-init-hook 'inf-ruby-switch-setup)
+#+end_src
+
 ** Web editing
 
 
