@@ -371,6 +371,7 @@ I'm currently working a lot with Ruby (on Rails). Adding rinari + rspec_mode
 #+begin_src emacs-lisp
 (require 'rinari)
 (require 'rspec-mode)
+(require 'smartparens)
 #+end_src
 
 **** Rbenv
