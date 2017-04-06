@@ -391,6 +391,21 @@ Add rbenv conf. With this configuration all bundler commands will work from insi
 #+end_src
 
 
+**** Smartparens
+Configuring smartparens for ruby
+
+#+begin_src emacs-lisp
+  (use-package smartparens
+    :ensure t)
+
+  (sp-with-modes '(ruby-mode)
+    (sp-local-pair "do" "end"
+                 :when '(("SPC" "RET"))
+                 :post-handlers '(sp-ruby-def-post-handler)
+                 :actions '(insert navigate)))
+#+end_src
+
+
 ** Web editing
 
 
