@@ -235,6 +235,13 @@ Counsel-projectile shortcuts
 (global-set-key (kbd "C-c p p") 'counsel-projectile-switch-project)
 #+end_src
 
+Projectile settings
+
+#+begin_src emacs-lisp
+(projectile-global-mode)
+(setq projectile-enable-caching t)
+#+end_src
+
 From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/][Pragmatic Emacs]] a more concise way to kill the buffer.
 
 #+begin_src emacs-lisp
