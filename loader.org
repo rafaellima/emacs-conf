@@ -231,7 +231,7 @@ Counsel-projectile shortcuts
 (global-set-key (kbd "C-c p f") 'counsel-projectile-find-file)
 (global-set-key (kbd "C-c p d") 'counsel-projectile-find-dir)
 (global-set-key (kbd "C-c p b") 'counsel-projectile-switch-buffer)
-(global-set-key (kbd "C-c p a g") 'counsel-projectile-ag)
+(global-set-key (kbd "C-c p s") 'projectile-grep)
 (global-set-key (kbd "C-c p p") 'counsel-projectile-switch-project)
 #+end_src
 
@@ -278,6 +278,12 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
   (scroll-bar-mode -1)
 #+end_src
 
+- Turn off auto-save and backup
+
+#+begin_src emacs-lisp
+  (setq auto-save-default nil)
+  (setq backup-inhibited t)
+#+end_src
 
 * Look and feel
 
