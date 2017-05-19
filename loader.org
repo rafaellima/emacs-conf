@@ -377,6 +377,25 @@ Magit is the only thing you need when it comes to Version Control (Git)
     (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
 #+END_SRC
 
+*** Xclip
+use xclip to copy/paste in emacs-nox
+
+#+begin_src emacs-lisp
+(unless window-system
+  (when (getenv "DISPLAY")
+    (defun xclip-cut-function (text &optional push)
+      (with-temp-buffer
+	(insert text)
+	(call-process-region (point-min) (point-max) "xclip" nil 0 nil "-i" "-selection" "clipboard")))
+    (defun xclip-paste-function()
+      (let ((xclip-output (shell-command-to-string "xclip -o -selection clipboard")))
+	(unless (string= (car kill-ring) xclip-output)
+	  xclip-output )))
+    (setq interprogram-cut-function 'xclip-cut-function)
+    (setq interprogram-paste-function 'xclip-paste-function)
+    ))
+#+end_src
+
 
 ** Ruby
 I'm currently working a lot with Ruby (on Rails). Adding rinari + rspec_mode
