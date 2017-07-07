@@ -609,3 +609,17 @@ cider-repl-reset, which should be project specific.
 
   (global-highlight-parentheses-mode)
 #+END_SRC
+
+** Racket
+
+*** Geiser
+#+name: credmp-clojure
+#+begin_src emacs-lisp
+  (use-package cider
+    :ensure t)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package racket-mode
+    :ensure t)
+#+end_src 
