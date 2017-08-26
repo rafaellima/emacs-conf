@@ -480,6 +480,13 @@ package.
 
 * Programming
 
+** Elixir
+
+#+begin_src emacs-lisp
+  (use-package elixir-mode
+    :ensure t)
+#+end_src
+
 ** General programming
 
 *** Look and feel
@@ -523,7 +530,6 @@ use xclip to copy/paste in emacs-nox
     (setq interprogram-paste-function 'xclip-paste-function)
     ))
 #+end_src
-
 
 ** Ruby
 I'm currently working a lot with Ruby (on Rails). Adding rinari + rspec_mode
