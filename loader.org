@@ -485,6 +485,26 @@ package.
 #+begin_src emacs-lisp
   (use-package elixir-mode
     :ensure t)
+  (use-package alchemist
+    :ensure t)
+#+end_src
+
+Use smartparens to add `end` as soon as you finish to type in the `do` keyword
+
+#+begin_src emacs-lisp
+(require 'smartparens)
+
+(defun my-elixir-do-end-close-action (id action context)
+  (when (eq action 'insert)
+    (newline-and-indent)
+    (previous-line)
+    (indent-according-to-mode)))
+
+(sp-with-modes '(elixir-mode)
+  (sp-local-pair "do" "end"
+         :when '(("SPC" "RET"))
+         :post-handlers '(:add my-elixir-do-end-close-action)
+         :actions '(insert)))
 #+end_src
 
 ** General programming
@@ -537,7 +557,6 @@ I'm currently working a lot with Ruby (on Rails). Adding rinari + rspec_mode
 #+begin_src emacs-lisp
 (require 'rinari)
 (require 'rspec-mode)
-(require 'smartparens)
 #+end_src
 
 **** Rbenv
