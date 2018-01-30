@@ -217,13 +217,20 @@ Bookmarks are very useful for quickly jumping around files.
            ivy--switch-buffer-other-window-action
            "other window")))))
 
-  (use-package counsel-projectile
-    :ensure t
-    :config
-    (counsel-projectile-on))
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-mode))
 
   (use-package ivy-hydra :ensure t)
 #+END_SRC
+
+Projectile settings
+
+#+begin_src emacs-lisp
+(projectile-global-mode)
+(setq projectile-enable-caching t)
+#+end_src
 
 Counsel-projectile shortcuts
 
@@ -233,13 +240,6 @@ Counsel-projectile shortcuts
 (global-set-key (kbd "C-c p b") 'counsel-projectile-switch-buffer)
 (global-set-key (kbd "C-c p s") 'projectile-grep)
 (global-set-key (kbd "C-c p p") 'counsel-projectile-switch-project)
-#+end_src
-
-Projectile settings
-
-#+begin_src emacs-lisp
-(projectile-global-mode)
-(setq projectile-enable-caching t)
 #+end_src
 
 From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/][Pragmatic Emacs]] a more concise way to kill the buffer.
@@ -382,7 +382,7 @@ Note that this overrides the default font-related keybindings from
 
 #+BEGIN_SRC emacs-lisp
   (setq hrs/default-font "Inconsolata")
-  (setq hrs/default-font-size 14)
+  (setq hrs/default-font-size 12)
   (setq hrs/current-font-size hrs/default-font-size)
 
   (setq hrs/font-change-increment 1.1)
