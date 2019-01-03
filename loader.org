@@ -292,6 +292,21 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
   (setq backup-inhibited t)
 #+end_src
 
+- Purpose
+
+#+begin_src emacs-lisp
+(use-package window-purpose
+  :ensure t
+  :config
+  (purpose-mode))
+
+(add-to-list 'purpose-user-mode-purposes '(ruby-mode . ru))
+(add-to-list 'purpose-user-mode-purposes '(magit-mode . git))
+(add-to-list 'purpose-user-mode-purposes '(org-mode . org))
+(add-to-list 'purpose-user-mode-purposes '(rspec-mode . rspec))
+(purpose-compile-user-configuration)
+#+end_src
+
 * Look and feel
 
 
@@ -321,31 +336,12 @@ Why not?
   (global-prettify-symbols-mode t)
 #+END_SRC
 
-** Custom solarized-dark theme
+** Custom theme
 
-I like the solarized-dark theme. I prefer keeping all the characters in the same
-side and font, though.
-
-#+BEGIN_SRC emacs-lisp
-  (defun hrs/apply-solarized-theme ()
-    (setq solarized-use-variable-pitch nil)
-    (setq solarized-height-plus-1 1.0)
-    (setq solarized-height-plus-2 1.0)
-    (setq solarized-height-plus-3 1.0)
-    (setq solarized-height-plus-4 1.0)
-    (setq solarized-high-contrast-mode-line t)
-    (load-theme 'solarized-dark t))
-#+END_SRC
-
-If this code is being evaluated by =emacs --daemon=, ensure that each subsequent
-frame is themed appropriately.
+Simple script to load desired theme on startup
 
 #+BEGIN_SRC emacs-lisp
-  (if (daemonp)
-      (add-hook 'after-make-frame-functions
-                (lambda (frame)
-                    (hrs/apply-solarized-theme)))
-    (hrs/apply-solarized-theme))
+  (load-theme 'nord t)
 #+END_SRC
 
 ** Disable visual bell
@@ -382,7 +378,7 @@ Note that this overrides the default font-related keybindings from
 
 #+BEGIN_SRC emacs-lisp
   (setq hrs/default-font "Inconsolata")
-  (setq hrs/default-font-size 12)
+  (setq hrs/default-font-size 16)
   (setq hrs/current-font-size hrs/default-font-size)
 
   (setq hrs/font-change-increment 1.1)
@@ -552,11 +548,14 @@ use xclip to copy/paste in emacs-nox
 #+end_src
 
 ** Ruby
+
 I'm currently working a lot with Ruby (on Rails). Adding rinari + rspec_mode
 
 #+begin_src emacs-lisp
 (require 'rinari)
 (require 'rspec-mode)
+
+(setq ruby-insert-encoding-magic-comment nil)
 #+end_src
 
 **** Rbenv
@@ -583,6 +582,8 @@ Configuring smartparens for ruby
 #+begin_src emacs-lisp
   (use-package smartparens
     :ensure t)
+
+(smartparens-global-mode)
 
   (sp-with-modes '(ruby-mode)
     (sp-local-pair "do" "end"
@@ -719,6 +720,14 @@ cider-repl-reset, which should be project specific.
     (cider-test-run-project-tests))
 #+END_SRC
 
+#+BEGIN_SRC emacs-lisp
+(setq cider-cljs-lein-repl
+	"(do (require 'figwheel-sidecar.repl-api)
+         (figwheel-sidecar.repl-api/start-figwheel!)
+         (figwheel-sidecar.repl-api/cljs-repl))")
+#+END_SRC
+
+
 *** LISP Editing
 
 #+name: credmp-lisp-editing
@@ -762,3 +771,35 @@ cider-repl-reset, which should be project specific.
 
   (global-highlight-parentheses-mode)
 #+END_SRC
+** Autocomplete mode
+Enable auto-complete on startup
+#+begin_src emacs-lisp
+(global-auto-complete-mode t)
+#+end_src
+
+* GTD
+Add org-mode custom configuration
+
+#+begin_src emacs-lisp
+(setq org-todo-keywords
+      (quote ((sequence "TODO(t)" "IN PROGRESS(i)" "|" "DONE(d)")
+              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
+
+(setq org-todo-keyword-faces
+      (quote (("TODO" :foreground "red" :weight bold)
+              ("IN PROGRESS" :foreground "blue" :weight bold)
+              ("DONE" :foreground "forest green" :weight bold)
+              ("WAITING" :foreground "orange" :weight bold)
+              ("HOLD" :foreground "magenta" :weight bold)
+              ("CANCELLED" :foreground "forest green" :weight bold))))
+#+end_src
+
+* Metrics
+
+Wakatime
+#+begin_src emacs-lisp
+  (use-package wakatime-mode
+    :ensure t)
+
+(global-wakatime-mode)
+#+end_src
