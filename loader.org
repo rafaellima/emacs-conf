@@ -152,6 +152,13 @@ this check and takes care of any loading of the packages.
      (init--install-packages)))
 #+end_src
 
+* Installing try-package
+** Setup
+#+BEGIN_SRC emacs-lisp
+  (use-package try
+    :ensure t)
+#+END_SRC
+
 * Moving around
 
 Be sure to just ask for y/n instead of yes/no.
