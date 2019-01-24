@@ -314,6 +314,18 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
 (purpose-compile-user-configuration)
 #+end_src
 
+
+- Ace window
+#+begin_src emacs-lisp
+  (use-package ace-window
+    ensure :t
+    :config
+    (ace-window-mode))
+
+  (global-set-key (kbd "C-x o") 'ace-window)
+#+end_src
+
+
 * Look and feel
 
 
