@@ -793,7 +793,11 @@ cider-repl-reset, which should be project specific.
 ** Autocomplete mode
 Enable auto-complete on startup
 #+begin_src emacs-lisp
-(global-auto-complete-mode t)
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (global-auto-complete-mode t)))
 #+end_src
 
 * GTD
