@@ -161,6 +161,14 @@ this check and takes care of any loading of the packages.
 
 * Moving around
 
+Rotate - good for switching windows when purpose is not active
+
+#+BEGIN_SRC emacs-lisp
+  (use-package rotate
+    :ensure t
+    :bind (("C-c pw" . rotate-window)))
+#+END_SRC
+
 Be sure to just ask for y/n instead of yes/no.
 
 #+BEGIN_SRC emacs-lisp
