@@ -684,8 +684,7 @@ Help move the cursor within Emacs
 
  #+begin_src emacs-lisp
  (use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
+  :ensure t)
  #+end_src
 
 ** Clojure
