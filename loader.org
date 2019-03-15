@@ -169,6 +169,14 @@ Rotate - good for switching windows when purpose is not active
     :bind (("C-c pw" . rotate-window)))
 #+END_SRC
 
+iedit - edit one occurance of some text in a buffer or region
+
+#+BEGIN_SRC emacs-lisp
+  (use-package iedit
+    :ensure t
+    :bind (("C-c -;" . iedit-mode)))
+#+END_SRC
+
 Be sure to just ask for y/n instead of yes/no.
 
 #+BEGIN_SRC emacs-lisp
