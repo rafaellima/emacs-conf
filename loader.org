@@ -646,6 +646,15 @@ To do so, use C-x C-q when you've hit a breakpoint
   (add-hook 'after-init-hook 'inf-ruby-switch-setup)
 #+end_src
 
+** Go
+
+emacs-go-mode - https://arenzana.org/2019/01/emacs-go-mode/
+
+#+BEGIN_SRC emacs-lisp
+  (use-package go-mode
+    :ensure t)
+#+END_SRC
+
 ** Web editing
 
 
