@@ -161,6 +161,12 @@ this check and takes care of any loading of the packages.
 
 * Moving around
 
+Disable tab
+
+#+BEGIN_SRC emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
 Rotate - good for switching windows when purpose is not active
 
 #+BEGIN_SRC emacs-lisp
