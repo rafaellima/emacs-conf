@@ -824,6 +824,27 @@ cider-repl-reset, which should be project specific.
 
   (global-highlight-parentheses-mode)
 #+END_SRC
+** Groovy
+
+Setting up groovy (mostly for Jenkins)
+
+#+begin_src emacs-lisp
+  (use-package groovy-mode
+    :ensure t)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package groovy-mode
+     :mode ("\\.g\\(?:ant\\|roovy\\|radle\\)\\'" "Jenkinsfile")
+     :init
+     (setq groovy-indent-offset 2))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package jenkins
+    :ensure t)
+#+end_src
+
 ** Autocomplete mode
 Enable auto-complete on startup
 #+begin_src emacs-lisp
