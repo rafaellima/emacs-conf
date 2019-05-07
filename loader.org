@@ -861,6 +861,13 @@ Enable auto-complete on startup
     (global-auto-complete-mode t)))
 #+end_src
 
+* Devops
+** Terraform
+#+begin_src emacs-lisp
+(use-package terraform-mode
+    :ensure t)
+#+end_src
+
 * GTD
 Add org-mode custom configuration
 
