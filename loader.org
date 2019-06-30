@@ -22,6 +22,11 @@ I modelled this set of files based off of the emacs-starter-kit at https://githu
 
 Great article why [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html][Your editor is malware]]. The following basically sets up the configuration to adhere to the articles recommondations.
 
+Fix MACOS certificate issue gnutils
+# #+BEGIN_EXPORT sh
+# mv /Applications/Emacs.app//Contents/MacOS/lib-x86_64-10_9/libgnutls.30.dylib .
+# #+END_EXPORT
+
 #+BEGIN_SRC shell :exports none
 python3 -m pip install --user certifi
 #+END_SRC
@@ -909,12 +914,6 @@ Add org-mode custom configuration
               ("HOLD" :foreground "magenta" :weight bold)
               ("CANCELLED" :foreground "forest green" :weight bold))))
 #+end_src
-
-org-beautify-theme
-#+BEGIN_SRC emacs-lisp
-(use-package org-beautify-theme
-  :ensure t)
-#+END_SRC
 
 #+begin_src emacs-lisp
 (org-babel-do-load-languages 'org-babel-load-languages
