@@ -23,7 +23,7 @@ I modelled this set of files based off of the emacs-starter-kit at https://githu
 Great article why [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html][Your editor is malware]]. The following basically sets up the configuration to adhere to the articles recommondations.
 
 #+BEGIN_SRC shell :exports none
-python -m pip install --user certifi
+python3 -m pip install --user certifi
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -34,7 +34,7 @@ python -m pip install --user certifi
   (setq tls-checktrust t)
 
   (setq python (or (executable-find "py.exe")
-                   (executable-find "python")
+                   (executable-find "python3")
                    ))
 
   (let ((trustfile
@@ -340,13 +340,10 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
 - Ace window
 #+begin_src emacs-lisp
   (use-package ace-window
-    ensure :t
-    :config
-    (ace-window-mode))
+    :ensure t)
 
   (global-set-key (kbd "C-x o") 'ace-window)
 #+end_src
-
 
 * Look and feel
 
@@ -679,7 +676,7 @@ The web-mode is particularily good for editing HTML and JS files.
     (defun my-web-mode-hook ()
       "Hooks for Web mode."
       (setq web-mode-enable-auto-closing t)
-      (setq web-mode-enable-auto-quoting t) 
+      (setq web-mode-enable-auto-quoting t)
       (setq web-mode-markup-indent-offset 2))
 
     (add-hook 'web-mode-hook  'my-web-mode-hook))
@@ -861,6 +858,11 @@ Enable auto-complete on startup
     (global-auto-complete-mode t)))
 #+end_src
 
+** Restclient
+#+BEGIN_SRC
+  (use-package restclient
+    :ensure t)
+#+END_SRC
 * Devops
 ** Terraform
 #+begin_src emacs-lisp
@@ -875,6 +877,23 @@ Enable auto-complete on startup
 #+end_src
 
 * GTD
+*** Org-mode
+
+org-bullets-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets
+  :ensure t)
+#+END_SRC
+
+Org-mode installation
+
+#+BEGIN_SRC emacs_lisp
+(use-package org-mode
+  :ensure t
+  :config (org-bullets-mode 1))
+#+END_SRC
+
 Add org-mode custom configuration
 
 #+begin_src emacs-lisp
@@ -890,6 +909,12 @@ Add org-mode custom configuration
               ("HOLD" :foreground "magenta" :weight bold)
               ("CANCELLED" :foreground "forest green" :weight bold))))
 #+end_src
+
+org-beautify-theme
+#+BEGIN_SRC emacs-lisp
+(use-package org-beautify-theme
+  :ensure t)
+#+END_SRC
 
 #+begin_src emacs-lisp
 (org-babel-do-load-languages 'org-babel-load-languages

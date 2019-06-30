@@ -1,6 +1,6 @@
 ;;; init.el --- Configuration of Emacs
 ;;
-;; (c) 2015 - 2017 Rafael Lima
+;; (c) 2015 - 2019 Rafael Lima
 ;;
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
