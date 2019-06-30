@@ -905,15 +905,12 @@ Add org-mode custom configuration
               ("CANCELLED" :foreground "forest green" :weight bold))))
 #+end_src
 
-#+begin_src emacs-lisp
-(org-babel-do-load-languages 'org-babel-load-languages
-    '(
-        (shell . t)
-        (ruby . t)
-        (go . t)
-    )
-)
-#+end_src
+#+BEGIN_SRC
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((shell . t)
+   (ruby .)))
+#+END_SRC
 
 * Metrics
 
