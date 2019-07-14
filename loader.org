@@ -647,10 +647,27 @@ To do so, use C-x C-q when you've hit a breakpoint
 ** Go
 
 emacs-go-mode - https://arenzana.org/2019/01/emacs-go-mode/
+tutorial -> http://tleyden.github.io/blog/2014/05/22/configure-emacs-as-a-go-editor-from-scratch/
 
 #+BEGIN_SRC emacs-lisp
   (use-package go-mode
     :ensure t)
+#+END_SRC
+
+go-autocomplete-mode
+
+#+BEGIN_SRC emacs-lisp
+  (use-package go-autocomplete
+    :ensure t)
+
+  (require 'go-autocomplete)
+  (require 'auto-complete-config)
+  (ac-config-default)
+#+END_SRC
+
+set GOPATH
+#+BEGIN_SRC emacs-lisp
+(setenv "GOPATH" "/Users/rafael/go")
 #+END_SRC
 
 ** Web editing
