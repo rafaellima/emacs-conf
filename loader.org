@@ -390,7 +390,7 @@ Why not?
 Simple script to load desired theme on startup
 
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'nord t)
+  (load-theme 'doom-nord t)
 #+END_SRC
 
 ** Disable visual bell
