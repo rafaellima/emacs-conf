@@ -683,7 +683,7 @@ set GOPATH
     :commands company-lsp)
 #+END_SRC
 
-format on save
+Hook - format on save
 #+BEGIN_SRC emacs-lisp
 (add-hook 'before-save-hook 'gofmt-before-save)
 #+END_SRC
@@ -692,6 +692,18 @@ flymake-mode go
 #+BEGIN_SRC emacs-lisp
 (use-package flymake-go
   :ensure t)
+#+END_SRC
+
+gotest
+#+BEGIN_SRC emacs-lisp
+(use-package gotest
+  :ensure t)
+
+(define-key go-mode-map (kbd "C-x f") 'go-test-current-file)
+(define-key go-mode-map (kbd "C-x t") 'go-test-current-test)
+(define-key go-mode-map (kbd "C-x p") 'go-test-current-project)
+(define-key go-mode-map (kbd "C-x b") 'go-test-current-benchmark)
+(define-key go-mode-map (kbd "C-x x") 'go-run)
 #+END_SRC
 
 ** Web editing
