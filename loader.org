@@ -655,31 +655,43 @@ To do so, use C-x C-q when you've hit a breakpoint
 
 emacs-go-mode - https://arenzana.org/2019/01/emacs-go-mode/
 tutorial -> http://tleyden.github.io/blog/2014/05/22/configure-emacs-as-a-go-editor-from-scratch/
+another tutorial -> https://dominik.honnef.co/posts/2013/03/writing_go_in_emacs/
 
 #+BEGIN_SRC emacs-lisp
   (use-package go-mode
     :ensure t)
 #+END_SRC
 
-go-autocomplete-mode
-
-#+BEGIN_SRC emacs-lisp
-  (use-package go-autocomplete
-    :ensure t)
-
-  (require 'go-autocomplete)
-  (require 'auto-complete-config)
-  (ac-config-default)
-#+END_SRC
-
 set GOPATH
 #+BEGIN_SRC emacs-lisp
-(setenv "GOPATH" "/Users/rafael/go")
+  (setenv "GOPATH" "/Users/rafael/go")
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :ensure t)
+
+  (use-package lsp-mode
+    :commands (lsp lsp-deferred))
+
+  (add-hook 'go-mode-hook #'lsp-deferred)
+
+  (use-package lsp-ui
+    :commands lsp-ui-mode)
+
+  (use-package company-lsp
+    :commands company-lsp)
 #+END_SRC
 
 format on save
 #+BEGIN_SRC emacs-lisp
 (add-hook 'before-save-hook 'gofmt-before-save)
+#+END_SRC
+
+flymake-mode go
+#+BEGIN_SRC emacs-lisp
+(use-package flymake-go
+  :ensure t)
 #+END_SRC
 
 ** Web editing
