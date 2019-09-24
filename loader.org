@@ -667,6 +667,18 @@ set GOPATH
   (setenv "GOPATH" "/Users/rafael/go")
 #+END_SRC
 
+Auto-complete
+#+BEGIN_SRC emacs-lisp
+  (use-package go-autocomplete
+    :ensure t)
+
+  (require 'go-autocomplete)
+  (require 'auto-complete-config)
+  (ac-config-default)
+#+END_SRC
+
+# Install github.com/sourcegraph/go-langserver
+
 #+BEGIN_SRC emacs-lisp
   (use-package lsp-mode
     :ensure t)
@@ -676,6 +688,7 @@ set GOPATH
 
   (add-hook 'go-mode-hook #'lsp-deferred)
 
+  ;; - provides fancier overlays
   (use-package lsp-ui
     :commands lsp-ui-mode)
 
