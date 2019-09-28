@@ -696,7 +696,13 @@ Auto-complete
     :commands company-lsp)
 #+END_SRC
 
-Hook - format on save
+#+BEGIN_SRC emacs-lisp
+(add-hook 'go-mode-hook
+  (setq-default
+    tab-width 4
+    standard-indent 4))
+#+END_SRC
+
 #+BEGIN_SRC emacs-lisp
 (add-hook 'before-save-hook 'gofmt-before-save)
 #+END_SRC
