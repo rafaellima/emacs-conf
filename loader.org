@@ -171,6 +171,13 @@ this check and takes care of any loading of the packages.
     :ensure t)
 #+END_SRC
 
+* Dashboard
+#+BEGIN_SRC emacs-lisp
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
+#+END_SRC
 * Moving around
 
 Disable tab
