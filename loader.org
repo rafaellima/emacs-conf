@@ -366,6 +366,13 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
 
 * Look and feel
 
+** mode-line
+*** Doom modeline
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+      :ensure t
+      :hook (after-init . doom-modeline-mode))
+#+END_SRC
 ** Tweak window chrome
 
 I don't usually use the menu or scroll bar, and they take up useful space.
@@ -397,7 +404,7 @@ Why not?
 Simple script to load desired theme on startup
 
 #+BEGIN_SRC emacs-lisp
-  (load-theme 'doom-nord t)
+  (load-theme 'doom-one-light t)
 #+END_SRC
 
 ** Disable visual bell
