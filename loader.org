@@ -527,7 +527,6 @@ package.
   (diminish-minor-mode 'abbrev 'abbrev-mode)
   (diminish-minor-mode 'simple 'auto-fill-function)
   (diminish-minor-mode 'company 'company-mode)
-  (diminish-minor-mode 'eldoc 'eldoc-mode)
   (diminish-minor-mode 'flycheck 'flycheck-mode)
   (diminish-minor-mode 'flyspell 'flyspell-mode)
   (diminish-minor-mode 'global-whitespace 'global-whitespace-mode)
