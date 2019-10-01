@@ -693,7 +693,14 @@ another tutorial -> https://dominik.honnef.co/posts/2013/03/writing_go_in_emacs/
 
 set GOPATH
 #+BEGIN_SRC emacs-lisp
-  (setenv "GOPATH" "/Users/rafael/go")
+  ;;(setenv "GOPATH" "/Users/rafael/go")
+(use-package exec-path-from-shell
+  :ensure t
+  :defer  2
+  :config
+  (dolist (var '("GOPATH"  "NVM_BIN"))
+    (add-to-list 'exec-path-from-shell-variables var))
+  (exec-path-from-shell-initialize))
 #+END_SRC
 
 Auto-complete
@@ -1004,13 +1011,3 @@ Add org-mode custom configuration
  '((shell . t)
    (ruby .)))
 #+END_SRC
-
-* Metrics
-
-Wakatime
-#+begin_src emacs-lisp
-  (use-package wakatime-mode
-    :ensure t)
-
-(global-wakatime-mode)
-#+end_src
