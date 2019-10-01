@@ -732,7 +732,9 @@ Auto-complete
     :commands company-lsp)
 #+END_SRC
 
+# go get golang.org/x/tools/cmd/goimports
 #+BEGIN_SRC emacs-lisp
+(setq gofmt-command "goimports")
 (add-hook 'before-save-hook 'gofmt-before-save)
 #+END_SRC
 
