@@ -353,6 +353,12 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
 #+end_src
 
 * Look and feel
+** all the icons
+
+We need to run all-the-icons-install-fonts as well
+#+BEGIN_SRC emacs-lisp
+(use-package all-the-icons)
+#+END_SRC
 
 ** mode-line
 *** Doom modeline
