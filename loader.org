@@ -255,6 +255,7 @@ Counsel-projectile shortcuts
 (global-set-key (kbd "C-c p b") 'counsel-projectile-switch-buffer)
 (global-set-key (kbd "C-c p s") 'projectile-grep)
 (global-set-key (kbd "C-c p p") 'counsel-projectile-switch-project)
+(global-set-key (kbd "C-c p i") 'projectile-invalidate-cache)
 #+end_src
 
 From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/][Pragmatic Emacs]] a more concise way to kill the buffer.
