@@ -22,29 +22,8 @@ Great article why [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html]
 Fix MACOS certificate issue gnutils
 
 #+BEGIN_SRC shell :exports none
-python3 -m pip install --user certifi
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-  (require 'cl)
-  (setq tls-checktrust t)
-
-  (setq python (or (executable-find "py.exe")
-                   (executable-find "python3")
-                   ))
-
-  (let ((trustfile
-         (replace-regexp-in-string
-          "\\\\" "/"
-          (replace-regexp-in-string
-           "\n" ""
-           (shell-command-to-string (concat python " -m certifi"))))))
-    (setq tls-program
-          (list
-           (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
-                   (if (eq window-system 'w32) ".exe" "") trustfile)))
-    (setq gnutls-verify-error t)
-    (setq gnutls-trustfiles (list trustfile)))
+(require 'gnutls)
+(add-to-list 'gnutls-trustfiles "/usr/local/etc/openssl/cert.pem")
 #+END_SRC
 
 * Installing use-package
