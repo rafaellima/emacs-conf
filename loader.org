@@ -798,6 +798,13 @@ Help move the cursor within Emacs
   :ensure t)
  #+end_src
 
+*** Undo-tree
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+  :ensure t)
+
+(global-undo-tree-mode)
+#+END_SRC
 ** Clojure
 
 The clojure ecosystem for GNU Emacs consists out of CIDER and bunch of
