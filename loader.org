@@ -654,18 +654,12 @@ To do so, use C-x C-q when you've hit a breakpoint
 
 ** Go
 
-emacs-go-mode - https://arenzana.org/2019/01/emacs-go-mode/
-tutorial -> http://tleyden.github.io/blog/2014/05/22/configure-emacs-as-a-go-editor-from-scratch/
-another tutorial -> https://dominik.honnef.co/posts/2013/03/writing_go_in_emacs/
-
 #+BEGIN_SRC emacs-lisp
   (use-package go-mode
     :ensure t)
 #+END_SRC
 
-set GOPATH
 #+BEGIN_SRC emacs-lisp
-  ;;(setenv "GOPATH" "/Users/rafael/go")
 (use-package exec-path-from-shell
   :ensure t
   :defer  2
@@ -675,7 +669,6 @@ set GOPATH
   (exec-path-from-shell-initialize))
 #+END_SRC
 
-Auto-complete
 #+BEGIN_SRC emacs-lisp
   (use-package go-autocomplete
     :ensure t)
@@ -685,48 +678,76 @@ Auto-complete
   (ac-config-default)
 #+END_SRC
 
-# Install github.com/sourcegraph/go-langserver
-
 #+BEGIN_SRC emacs-lisp
-  (use-package lsp-mode
-    :ensure t)
+(use-package lsp-mode
+  :ensure t
+  :commands (lsp lsp-deferred)
+  :hook (go-mode . lsp-deferred))
 
-  (use-package lsp-mode
-    :commands (lsp lsp-deferred))
+;; Set up before-save hooks to format buffer and add/delete imports.
+;; Make sure you don't have other gofmt/goimports hooks enabled.
+(defun lsp-go-install-save-hooks ()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+(add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-  (add-hook 'go-mode-hook #'lsp-deferred)
+;; Optional - provides fancier overlays.
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
 
-  (setq-default
-    tab-width 4
-    standard-indent 4)
+;; Company mode is a standard completion package that works well with lsp-mode.
+(use-package company
+  :ensure t
+  :config
+  ;; Optionally enable completion-as-you-type behavior.
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1))
 
-  (use-package company-lsp
-    :commands company-lsp)
+;; company-lsp integrates company mode completion with lsp-mode.
+;; completion-at-point also works out of the box but doesn't support snippets.
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
+
+(use-package yasnippet
+  :ensure t
+  :commands yas-minor-mode
+  :hook (go-mode . yas-minor-mode))
+
+(use-package flycheck
+  :ensure t
+  :commands flycheck-mode
+  :hook (go-mode . flycheck-mode))
+
+(setq-default
+  tab-width 4
+  standard-indent 4)
 #+END_SRC
 
-# go get golang.org/x/tools/cmd/goimports
-#+BEGIN_SRC emacs-lisp
-(setq gofmt-command "goimports")
-(add-hook 'before-save-hook 'gofmt-before-save)
-#+END_SRC
+# # go get golang.org/x/tools/cmd/goimports
+# #+BEGIN_SRC emacs-lisp
+# (setq gofmt-command "goimports")
+# (add-hook 'before-save-hook 'gofmt-before-save)
+# #+END_SRC
 
-flymake-mode go
-#+BEGIN_SRC emacs-lisp
-(use-package flymake-go
-  :ensure t)
-#+END_SRC
+# flymake-mode go
+# #+BEGIN_SRC emacs-lisp
+# (use-package flymake-go
+#   :ensure t)
+# #+END_SRC
 
-gotest
-#+BEGIN_SRC emacs-lisp
-(use-package gotest
-  :ensure t)
+# gotest
+# #+BEGIN_SRC emacs-lisp
+# (use-package gotest
+#   :ensure t)
 
-(define-key go-mode-map (kbd "C-x f") 'go-test-current-file)
-(define-key go-mode-map (kbd "C-x t") 'go-test-current-test)
-(define-key go-mode-map (kbd "C-x p") 'go-test-current-project)
-(define-key go-mode-map (kbd "C-x b") 'go-test-current-benchmark)
-(define-key go-mode-map (kbd "C-x x") 'go-run)
-#+END_SRC
+# (define-key go-mode-map (kbd "C-x f") 'go-test-current-file)
+# (define-key go-mode-map (kbd "C-x t") 'go-test-current-test)
+# (define-key go-mode-map (kbd "C-x p") 'go-test-current-project)
+# (define-key go-mode-map (kbd "C-x b") 'go-test-current-benchmark)
+# (define-key go-mode-map (kbd "C-x x") 'go-run)
+# #+END_SRC
 
 ** Web editing
 
