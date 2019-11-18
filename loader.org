@@ -399,7 +399,7 @@ Simple script to load desired theme on startup
 
 #+BEGIN_SRC emacs-lisp
   (use-package doom-themes
-    :config (load-theme 'doom-one-light t))
+    :config (load-theme 'doom-one t))
 #+END_SRC
 
 ** Disable visual bell
