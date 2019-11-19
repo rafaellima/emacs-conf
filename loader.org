@@ -691,6 +691,9 @@ To do so, use C-x C-q when you've hit a breakpoint
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
+(setq gofmt-command "goimports")
+(add-hook 'before-save-hook 'gofmt-before-save)
+
 ;; Optional - provides fancier overlays.
 (use-package lsp-ui
   :ensure t
