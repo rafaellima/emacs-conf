@@ -728,19 +728,6 @@ To do so, use C-x C-q when you've hit a breakpoint
   standard-indent 4)
 #+END_SRC
 
-# # go get golang.org/x/tools/cmd/goimports
-# #+BEGIN_SRC emacs-lisp
-# (setq gofmt-command "goimports")
-# (add-hook 'before-save-hook 'gofmt-before-save)
-# #+END_SRC
-
-# flymake-mode go
-# #+BEGIN_SRC emacs-lisp
-# (use-package flymake-go
-#   :ensure t)
-# #+END_SRC
-
-# gotest
 # #+BEGIN_SRC emacs-lisp
 # (use-package gotest
 #   :ensure t)
