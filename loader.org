@@ -14,7 +14,6 @@ This is my version of an configuration file for GNU Emacs. I have been using GNU
   (setq user-full-name "Rafael Lima")
 #+END_SRC
 
-
 * A secure Emacs environment
 
 Great article why [[https://glyph.twistedmatrix.com/2015/11/editor-malware.html][Your editor is malware]]. The following basically sets up the configuration to adhere to the articles recommondations.
@@ -78,18 +77,20 @@ this check and takes care of any loading of the packages.
 
 #+name: credmp-package-installer
 #+begin_src emacs-lisp
-  (defun packages-install (&rest packages)
-    (message "running packages-install")
-    (mapc (lambda (package)
-            (let ((name (car package))
-                  (repo (cdr package)))
-              (when (not (package-installed-p name))
-                (let ((package-archives (list repo)))
-                  (package-initialize)
-                  (package-install name)))))
-          packages)
-    (package-initialize)
-    (delete-other-windows))
+(defun packages-install (&rest packages)
+  (message "running packages-install")
+  (mapc (lambda (package)
+          (let ((name (car package))
+                (repo (cdr package)))
+            (when (not (package-installed-p name))
+              (let ((package-archives (list repo)))
+                (when (< emacs-major-version 27)
+                  (package-initialize))
+                (package-install name)))))
+        packages)
+  (when (< emacs-major-version 27)
+    (package-initialize))
+  (delete-other-windows))
 #+end_src
 
 ** The package
@@ -119,23 +120,6 @@ this check and takes care of any loading of the packages.
     :ensure t)
 #+END_SRC
 
-* Installing initializer profiler
-** setup
-#+BEGIN_SRC emacs-lisp
-  (use-package esup
-    :ensure t)
-#+END_SRC
-
-* Metrics
-
-Wakatime
-#+begin_src emacs-lisp
-  (use-package wakatime-mode
-    :ensure t)
-
-(global-wakatime-mode)
-#+end_src
-
 * Dashboard
 
 #+BEGIN_SRC emacs-lisp
@@ -145,15 +129,35 @@ Wakatime
   (dashboard-setup-startup-hook))
 #+END_SRC
 
+Customization
+#+BEGIN_SRC emacs-lisp
+(setq dashboard-center-content t)
+
+(setq dashboard-items '((projects  . 5)
+                        (bookmarks . 5)
+                        (recents . 5)
+                        (agenda . 5)
+                        (registers . 5)))
+
+(setq dashboard-set-heading-icons t)
+(setq dashboard-set-file-icons t)
+
+(setq dashboard-set-navigator t)
+
+(setq dashboard-set-init-info t)
+
+(add-to-list 'dashboard-items '(agenda) t)
+#+END_SRC
+
 * Moving around
 
-Disable tab
+Tabs vs Spaces
 
 #+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
 #+END_SRC
 
-Rotate - good for switching windows when purpose is not active
+Rotate - Good for switching windows when purpose is not active
 
 #+BEGIN_SRC emacs-lisp
   (use-package rotate
@@ -167,23 +171,6 @@ iedit - edit one occurance of some text in a buffer or region
   (use-package iedit
     :ensure t
     :bind (("C-c -;" . iedit-mode)))
-#+END_SRC
-
-Be sure to just ask for y/n instead of yes/no.
-
-#+BEGIN_SRC emacs-lisp
-(fset 'yes-or-no-p 'y-or-n-p)
-#+END_SRC
-
-Bookmarks are very useful for quickly jumping around files.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package bm
-    :ensure t
-    :bind (("C-c =" . bm-toggle)
-           ("C-c [" . bm-previous)
-           ("C-c ]" . bm-next)))
-
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -252,16 +239,10 @@ Counsel-projectile shortcuts
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-c p f") 'counsel-projectile-find-file)
 (global-set-key (kbd "C-c p d") 'counsel-projectile-find-dir)
-(global-set-key (kbd "C-c p b") 'counsel-projectile-switch-buffer)
+(global-set-key (kbd "C-c p b") 'counsel-projectile-switch-to-buffer)
 (global-set-key (kbd "C-c p s") 'projectile-grep)
 (global-set-key (kbd "C-c p p") 'counsel-projectile-switch-project)
 (global-set-key (kbd "C-c p i") 'projectile-invalidate-cache)
-#+end_src
-
-From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead/][Pragmatic Emacs]] a more concise way to kill the buffer.
-
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
 #+end_src
 
 * Discover-ability
@@ -292,22 +273,6 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
 
 ** GUI
 
-- Turn off mouse interface early in startup to avoid momentary display.
-
-#+name: credmp-gui
-#+begin_src emacs-lisp
-  (menu-bar-mode 1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-#+end_src
-
-- Turn off auto-save and backup
-
-#+begin_src emacs-lisp
-  (setq auto-save-default nil)
-  (setq backup-inhibited t)
-#+end_src
-
 - Purpose
 
 #+begin_src emacs-lisp
@@ -322,7 +287,6 @@ From [[http://pragmaticemacs.com/emacs/dont-kill-buffer-kill-this-buffer-instead
 (add-to-list 'purpose-user-mode-purposes '(rspec-mode . rspec))
 (purpose-compile-user-configuration)
 #+end_src
-
 
 - Ace window
 #+begin_src emacs-lisp
@@ -347,6 +311,8 @@ We need to run all-the-icons-install-fonts as well
       :ensure t
       :hook (after-init . doom-modeline-mode))
 #+END_SRC
+
+
 ** Tweak window chrome
 
 I don't usually use the menu or scroll bar, and they take up useful space.
@@ -365,6 +331,7 @@ project:
   (setq frame-title-format '((:eval (projectile-project-name))))
 #+END_SRC
 
+
 ** Use fancy lambdas
 
 Why not?
@@ -373,95 +340,31 @@ Why not?
   (global-prettify-symbols-mode t)
 #+END_SRC
 
+
 ** Custom theme
 
 Simple script to load desired theme on startup
 
 #+BEGIN_SRC emacs-lisp
+(when (window-system)
   (use-package doom-themes
-    :config (load-theme 'doom-one t))
+    :config
+    (load-theme 'doom-one t)
+
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
+
+    (set-face-attribute 'default nil :font "Hack-15")
+  )
 #+END_SRC
 
-** Disable visual bell
 
-=sensible-defaults= replaces the audible bell with a visual one, but I really
-don't even want that (and my Emacs/Mac pair renders it poorly). This disables
-the bell altogether.
+** Disable visual bell
 
 #+BEGIN_SRC emacs-lisp
   (setq ring-bell-function 'ignore)
 #+END_SRC
 
-** Scroll conservatively
-
-When point goes outside the window, Emacs usually recenters the buffer point.
-I'm not crazy about that. This changes scrolling behavior to only scroll as far
-as point goes.
-
-#+BEGIN_SRC emacs-lisp
-  (setq scroll-conservatively 100)
-#+END_SRC
-
-** Set default font and configure font resizing
-
-I'm partial to Inconsolata.
-
-The standard =text-scale-= functions just resize the text in the current buffer;
-I'd generally like to resize the text in /every/ buffer, and I usually want to
-change the size of the modeline, too (this is especially helpful when
-presenting). These functions and bindings let me resize everything all together!
-
-Note that this overrides the default font-related keybindings from
-=sensible-defaults=.
-
-#+BEGIN_SRC emacs-lisp
-  (setq hrs/default-font "Inconsolata")
-  (setq hrs/default-font-size 18)
-  (setq hrs/current-font-size hrs/default-font-size)
-
-  (setq hrs/font-change-increment 1.1)
-
-  (defun hrs/font-code ()
-    "Return a string representing the current font (like \"Inconsolata-14\")."
-    (concat hrs/default-font "-" (number-to-string hrs/current-font-size)))
-
-  (defun hrs/set-font-size ()
-    "Set the font to `hrs/default-font' at `hrs/current-font-size'.
-  Set that for the current frame, and also make it the default for
-  other, future frames."
-    (let ((font-code (hrs/font-code)))
-      (add-to-list 'default-frame-alist (cons 'font font-code))
-      (set-frame-font font-code)))
-
-  (defun hrs/reset-font-size ()
-    "Change font size back to `hrs/default-font-size'."
-    (interactive)
-    (setq hrs/current-font-size hrs/default-font-size)
-    (hrs/set-font-size))
-
-  (defun hrs/increase-font-size ()
-    "Increase current font size by a factor of `hrs/font-change-increment'."
-    (interactive)
-    (setq hrs/current-font-size
-          (ceiling (* hrs/current-font-size hrs/font-change-increment)))
-    (hrs/set-font-size))
-
-  (defun hrs/decrease-font-size ()
-    "Decrease current font size by a factor of `hrs/font-change-increment', down to a minimum size of 1."
-    (interactive)
-    (setq hrs/current-font-size
-          (max 1
-               (floor (/ hrs/current-font-size hrs/font-change-increment))))
-    (hrs/set-font-size))
-
-  (define-key global-map (kbd "C-)") 'hrs/reset-font-size)
-  (define-key global-map (kbd "C-+") 'hrs/increase-font-size)
-  (define-key global-map (kbd "C-=") 'hrs/increase-font-size)
-  (define-key global-map (kbd "C-_") 'hrs/decrease-font-size)
-  (define-key global-map (kbd "C--") 'hrs/decrease-font-size)
-
-  (hrs/reset-font-size)
-#+END_SRC
 
 ** Highlight the current line
 
@@ -473,6 +376,7 @@ pairing or presenting code.
   (when window-system
     (global-hl-line-mode))
 #+END_SRC
+
 
 ** Hide certain modes from the modeline
 
@@ -511,37 +415,21 @@ package.
   (diminish-major-mode 'python-mode-hook "Py")
 #+END_SRC
 
+
+** Fullscreen
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+#+END_SRC
+
+
+** Line number
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'prog-mode-hook 'linum-mode)
+#+END_SRC
+
 * Programming
-
-** Elixir
-
-#+begin_src emacs-lisp
-  (use-package elixir-mode
-    :ensure t)
-  (use-package alchemist
-    :ensure t)
-#+end_src
-
-Use smartparens to add `end` as soon as you finish to type in the `do` keyword
-
-#+begin_src emacs-lisp
-(require 'smartparens)
-
-(defun my-elixir-do-end-close-action (id action context)
-  (when (eq action 'insert)
-    (newline-and-indent)
-    (previous-line)
-    (indent-according-to-mode)))
-
-(sp-with-modes '(elixir-mode)
-  (sp-local-pair "do" "end"
-         :when '(("SPC" "RET"))
-         :post-handlers '(:add my-elixir-do-end-close-action)
-         :actions '(insert)))
-#+end_src
-
 ** General programming
-
 *** Look and feel
 
 Yasnippet
@@ -572,62 +460,59 @@ Magit is the only thing you need when it comes to Version Control (Git)
   (use-package magit
     :ensure t
     :bind (("C-c m s" . magit-status)))
-
-  (use-package magit-gitflow
-    :ensure t
-    :config
-    (add-hook 'magit-mode-hook 'turn-on-magit-gitflow))
 #+END_SRC
 
-*** Xclip
-use xclip to copy/paste in emacs-nox
+*** Utils
+
+#+BEGIN_SRC emacs-lisp
+  (use-package smartparens
+    :ensure t)
+#+END_SRC
+
+** Elixir
 
 #+begin_src emacs-lisp
-(unless window-system
-  (when (getenv "DISPLAY")
-    (defun xclip-cut-function (text &optional push)
-      (with-temp-buffer
-	(insert text)
-	(call-process-region (point-min) (point-max) "xclip" nil 0 nil "-i" "-selection" "clipboard")))
-    (defun xclip-paste-function()
-      (let ((xclip-output (shell-command-to-string "xclip -o -selection clipboard")))
-	(unless (string= (car kill-ring) xclip-output)
-	  xclip-output )))
-    (setq interprogram-cut-function 'xclip-cut-function)
-    (setq interprogram-paste-function 'xclip-paste-function)
-    ))
+  (use-package elixir-mode
+    :ensure t)
+  (use-package alchemist
+    :ensure t)
+#+end_src
+
+Use smartparens to add `end` as soon as you finish to type in the `do` keyword
+
+#+begin_src emacs-lisp
+(require 'smartparens)
+
+(defun my-elixir-do-end-close-action (id action context)
+  (when (eq action 'insert)
+    (newline-and-indent)
+    (previous-line)
+    (indent-according-to-mode)))
+
+(sp-with-modes '(elixir-mode)
+  (sp-local-pair "do" "end"
+         :when '(("SPC" "RET"))
+         :post-handlers '(:add my-elixir-do-end-close-action)
+         :actions '(insert)))
 #+end_src
 
 ** Ruby
 
-I'm currently working a lot with Ruby (on Rails). Adding rinari + rspec_mode
+*** Rspec
+
+#+BEGIN_SRC emacs-lisp
+(use-package rspec-mode
+  :ensure t)
+#+END_SRC
 
 #+begin_src emacs-lisp
-(require 'rinari)
 (require 'rspec-mode)
 
 (setq ruby-insert-encoding-magic-comment nil)
 #+end_src
 
-**** Rbenv
-Add rbenv conf. With this configuration all bundler commands will work from inside emacs
 
-#+begin_src emacs-lisp
-  (if (file-exists-p "/usr/local/bin/rbenv")
-  (require 'rbenv)
-
-  (setq rbenv-installation-dir "/usr/local/rbenv")
-
-  (global-rbenv-mode))
-
-  ;; Setting rbenv path
-  (setenv "PATH" (concat (getenv "HOME") "/.rbenv/shims:" (getenv "HOME") "/.rbenv/bin:" (getenv "PATH")))
-  (setq exec-path (cons (concat (getenv "HOME") "/.rbenv/shims") (cons (concat (getenv "HOME") "/.rbenv/bin") exec-path)))
-
-#+end_src
-
-
-**** Smartparens
+*** Smartparens
 Configuring smartparens for ruby
 
 #+begin_src emacs-lisp
@@ -641,15 +526,6 @@ Configuring smartparens for ruby
                  :when '(("SPC" "RET"))
                  :post-handlers '(sp-ruby-def-post-handler)
                  :actions '(insert navigate)))
-#+end_src
-
-
-**** Pry
-In order to enable pry when using rspec-mode we need to initialize inf-ruby
-To do so, use C-x C-q when you've hit a breakpoint
-
-#+begin_src emacs-lisp
-  (add-hook 'after-init-hook 'inf-ruby-switch-setup)
 #+end_src
 
 ** Go
@@ -739,38 +615,6 @@ To do so, use C-x C-q when you've hit a breakpoint
 # (define-key go-mode-map (kbd "C-x x") 'go-run)
 # #+END_SRC
 
-** Web editing
-
-
-The web-mode is particularily good for editing HTML and JS files.
-
-#+name: credmp-package-web
-#+begin_src emacs-lisp
-  (use-package web-mode
-    :ensure t
-    :config
-    (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.xhtml?\\'" . web-mode))
-
-    (defun my-web-mode-hook ()
-      "Hooks for Web mode."
-      (setq web-mode-enable-auto-closing t)
-      (setq web-mode-enable-auto-quoting t)
-      (setq web-mode-markup-indent-offset 2))
-
-    (add-hook 'web-mode-hook  'my-web-mode-hook))
-
-  (use-package less-css-mode
-    :ensure t)
-
-  (use-package emmet-mode
-    :ensure t
-    :config
-    (add-hook 'clojure-mode-hook 'emmet-mode))
-#+end_src
-
 ** Plugins
 *** Ace jump
 Help move the cursor within Emacs
@@ -795,126 +639,6 @@ Help move the cursor within Emacs
 
 (global-undo-tree-mode)
 #+END_SRC
-** Clojure
-
-The clojure ecosystem for GNU Emacs consists out of CIDER and bunch of
-supporting modules.
-
-*** CIDER
-
-#+name: credmp-clojure
-#+begin_src emacs-lisp
-  (use-package cider
-    :ensure t
-    :pin melpa-stable
-
-    :config
-    (add-hook 'cider-repl-mode-hook #'company-mode)
-    (add-hook 'cider-mode-hook #'company-mode)
-    (add-hook 'cider-mode-hook #'eldoc-mode)
-    (add-hook 'cider-mode-hook #'cider-hydra-mode)
-    (add-hook 'clojure-mode-hook #'paredit-mode)
-    (setq cider-repl-use-pretty-printing t)
-    (setq cider-repl-display-help-banner nil)
-    (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
-
-    :bind (("M-r" . cider-namespace-refresh)
-           ("C-c r" . cider-repl-reset)
-           ("C-c ." . cider-reset-test-run-tests))
-    )
-
-  (use-package clj-refactor
-    :ensure t
-    :config
-    (add-hook 'clojure-mode-hook (lambda ()
-                                   (clj-refactor-mode 1)
-                                   ;; insert keybinding setup here
-                                   ))
-    (cljr-add-keybindings-with-prefix "C-c C-m")
-    (setq cljr-warn-on-eval nil)
-    :bind ("C-c '" . hydra-cljr-help-menu/body)
-  )
-#+end_src
-**** TODO Cider Support Functions
-
-Some support functions to help with the connection between the buffer
-and the REPL. Big caveat you need to fix here is the hard-coded
-cider-repl-reset, which should be project specific.
-
-!TODO! fix this.
-
-#+BEGIN_SRC emacs-lisp
-  (defun cider-repl-command (cmd)
-    "Execute commands on the cider repl"
-    (cider-switch-to-repl-buffer)
-    (goto-char (point-max))
-    (insert cmd)
-    (cider-repl-return)
-    (cider-switch-to-last-clojure-buffer))
-
-  (defun cider-repl-reset ()
-    "Assumes reloaded + tools.namespace is used to reload everything"
-    (interactive)
-    (save-some-buffers)
-    (cider-repl-command "(trivia.core/reset)"))
-
-  (defun cider-reset-test-run-tests ()
-    (interactive)
-    (cider-repl-reset)
-    (cider-test-run-project-tests))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-(setq cider-cljs-lein-repl
-	"(do (require 'figwheel-sidecar.repl-api)
-         (figwheel-sidecar.repl-api/start-figwheel!)
-         (figwheel-sidecar.repl-api/cljs-repl))")
-#+END_SRC
-
-
-*** LISP Editing
-
-#+name: credmp-lisp-editing
-#+BEGIN_SRC emacs-lisp
-  (use-package paredit
-    :ensure t
-    :diminish paredit-mode
-    :config
-    (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-    (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-    (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-    (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-    (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-    (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-    :bind (("C-c d" . paredit-forward-down))
-    )
-
-  ;; Ensure paredit is used EVERYWHERE!
-  (use-package paredit-everywhere
-    :ensure t
-    :diminish paredit-everywhere-mode
-    :config
-    (add-hook 'prog-mode-hook #'paredit-everywhere-mode))
-
-  (use-package highlight-parentheses
-    :ensure t
-    :diminish highlight-parentheses-mode
-    :config
-    (add-hook 'emacs-lisp-mode-hook
-              (lambda()
-                (highlight-parentheses-mode)
-                )))
-
-  (use-package rainbow-delimiters
-    :ensure t
-    :config
-    (add-hook 'lisp-mode-hook
-              (lambda()
-                (rainbow-delimiters-mode)
-                )))
-
-  (global-highlight-parentheses-mode)
-#+END_SRC
 ** Groovy
 
 Setting up groovy (mostly for Jenkins)
@@ -936,34 +660,7 @@ Setting up groovy (mostly for Jenkins)
     :ensure t)
 #+end_src
 
-** Autocomplete mode
-
-*** company
-#+BEGIN_SRC emacs-lisp
-(use-package company
-  :ensure t)
-#+END_SRC
-
-
-** Restclient
-#+BEGIN_SRC
-  (use-package restclient
-    :ensure t)
-#+END_SRC
-* Devops
-** Terraform
-#+begin_src emacs-lisp
-(use-package terraform-mode
-    :ensure t)
-#+end_src
-
-** Docker
-#+begin_src emacs-lisp
-(use-package dockerfile-mode
-    :ensure t)
-#+end_src
-
-* GTD
+* Org
 *** Org-mode
 
 org-bullets-mode
